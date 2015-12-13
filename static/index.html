@@ -43,11 +43,9 @@
 			xmlHttp.send(null);
 		};
 		
-		if(location.hash == "#menu") {
-			loadScreen("Menu", socket);
-		} else if(location.hash == "#builder") {
+		if(location.hash == "#builder") {
 			loadScreen("GameBuilder", socket);
-		} else {
+		} else if (location.hash != "") {
 			var i = parseInt(location.hash.substr(1,2)) || 0;
 			socket.once("rooms",function(rooms) {
 				loadScreen("Pictionary", function(p) {
@@ -56,6 +54,8 @@
 				}, socket, rooms[1]);
 			});
 			socket.emit("roomsRequest");
+		} else {
+			loadScreen("Menu", socket);
 		}
 		
 		var openSandbox = function() {

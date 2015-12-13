@@ -339,7 +339,7 @@ io.on('connection', function (socket) {
             teams: settings.teams,
             countWords: settings.countWords,
 			time: 30
-        });
+        }).start();
         joinRoom(settings.room);
     });
 });
