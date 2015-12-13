@@ -346,6 +346,9 @@ io.on('connection', function (socket) {
 
 app.use(express.static('static'));
 
-http.listen(8080, function () {
-    console.log('listening on *:80');
+var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+var port = process.env.OPENSHIFT_NODEJS_PORT || 80;
+
+http.listen(port, ipaddress, function () {
+    console.log('listening on *:8000');
 });
