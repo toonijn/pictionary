@@ -1,0 +1,382 @@
+@import "/reset.css";
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(/icons/MaterialIcons-Regular.eot);
+  src: local('Material Icons'), local('MaterialIcons-Regular'), url(/icons/MaterialIcons-Regular.woff2) format('woff2'), url(/icons/MaterialIcons-Regular.woff) format('woff'), url(/icons/MaterialIcons-Regular.ttf) format('truetype');
+  
+  /* For IE6-8 */
+}
+* {
+  box-sizing: border-box;
+}
+html {
+  font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  height: 100%;
+}
+body {
+  height: 100%;
+  background: #b6b6b6;
+  color: #212121;
+}
+html,
+body,
+div {
+  margin: 0;
+  padding: 0;
+}
+p {
+  margin-bottom: 10px;
+  line-height: 1.2em;
+}
+h3 {
+  font-size: 120%;
+  font-weight: bold;
+  background: #03A9F4;
+  color: white;
+  box-shadow: 0px 0px 10px 0px black;
+  position: relative;
+  padding: 10px;
+  margin: -10px -10px 10px;
+}
+h3 a.back {
+  color: inherit;
+}
+button {
+  border: 0;
+  background: #03A9F4;
+  display: inline-block;
+  font-weight: bold;
+  padding: 8px 6px 4px 4px;
+  color: white;
+  font-size: inherit;
+}
+input[type=text],
+input[type=number] {
+  border-bottom: 1px solid #03A9F4;
+  padding: 4px;
+}
+.em {
+  color: #03a9f4;
+}
+.icon {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  /* Preferred icon size */
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'liga';
+  float: left;
+  display: block;
+  margin: -4px 8px 0 0;
+}
+.toolbar {
+  background: #03a9f4;
+  box-shadow: 0px 0px 10px 2px black;
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+}
+.tools {
+  display: block;
+  padding: 15px;
+  overflow: hidden;
+  margin: 0 auto;
+  max-width: 100vh;
+}
+.tools ul {
+  padding: 0;
+}
+.tools li {
+  float: left;
+  display: block;
+  margin-right: 15px;
+}
+.tools li a {
+  line-height: 20px;
+  color: inherit;
+  text-decoration: none;
+  font-weight: bold;
+  position: relative;
+  z-index: 3;
+  display: inline-block;
+}
+.tools .right {
+  float: right;
+}
+.tools .right li {
+  margin-left: 15px;
+  margin-right: 0px;
+}
+#screenContent {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: block;
+}
+#popupWrapper {
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+#popupWrapper .popup {
+  max-width: 95%;
+  top: 50%;
+  left: 50%;
+  height: 500px;
+  max-height: 90%;
+  width: 350px;
+  position: absolute;
+}
+#popupWrapper .popup .content {
+  top: -50%;
+  left: -50%;
+  position: relative;
+  box-shadow: 0px 0px 10px 2px black;
+  background: white;
+  padding: 10px;
+  overflow: hidden;
+}
+#popupWrapper .popup a.back {
+  color: inherit;
+  text-decoration: none;
+}
+#popupWrapper ul.selector {
+  padding: 0 0 0 40px;
+  color: #03a9f4;
+  margin-bottom: 10px;
+}
+#popupWrapper ul.selector li {
+  padding: 2px 0;
+}
+#popupWrapper ul.selector li input {
+  display: none;
+}
+#popupWrapper ul.selector li input + label:before {
+  content: "";
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  /* Preferred icon size */
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'liga';
+  float: left;
+  display: block;
+  margin: -4px 8px 0 0;
+}
+#popupWrapper ul.selector li input:checked + label {
+  font-weight: bold;
+}
+#popupWrapper ul.selector li input:checked + label:before {
+  content: "arrow_forward";
+}
+#popupWrapper ul.selector li label:hover {
+  font-weight: bold;
+}
+html .ifFullscreen {
+  display: none !important;
+}
+html .ifNotFullscreen {
+  display: block !important;
+}
+html.fullscreen .ifFullscreen {
+  display: block !important;
+}
+html.fullscreen .ifNotFullscreen {
+  display: none !important;
+}
+html.noFullscreen .needFullscreen {
+  display: none !important;
+}
+#game-builder {
+  box-shadow: 0px 0px 10px 2px black;
+  background: white;
+  width: 400px;
+  margin: 5vh auto 0;
+  padding: 10px;
+  border: 1px solid #03a9f4;
+  overflow: hidden;
+}
+#game-builder select {
+  color: inherit;
+  border-bottom: 1px solid #03a9f4;
+  padding: 4px;
+  background: inherit;
+}
+#game-builder ul.settings {
+  overflow-y: auto;
+  max-height: 80vh;
+  margin: -10px;
+  padding: 10px;
+}
+#game-builder ul.settings > li {
+  padding: 5px 0;
+}
+#game-builder ul.settings > li label {
+  width: 100px;
+  max-width: 40%;
+  font-weight: bold;
+  text-align: right;
+  padding: 0 5px;
+}
+#game-builder ul.settings > li.newTeam a {
+  display: inline-block;
+  float: none;
+  color: #03a9f4;
+  text-decoration: none;
+  font-size: inherit;
+}
+#game-builder ul.settings > li a.newTeam {
+  display: inline-block;
+  float: none;
+  color: #03a9f4;
+  text-decoration: none;
+}
+#game-builder ul.settings > li a.newTeam:hover {
+  text-decoration: underline;
+}
+#menu {
+  max-width: 95%;
+  top: 50%;
+  left: 50%;
+  height: 600px;
+  max-height: 90%;
+  width: 400px;
+  position: fixed;
+}
+#menu .contentWrapper {
+  box-shadow: 0px 0px 10px 2px black;
+  background: white;
+  top: -50%;
+  left: -50%;
+  position: relative;
+  padding: 10px;
+  overflow: hidden;
+}
+#menu .selections {
+  padding: 15px;
+  margin: 0;
+}
+#menu .selections li {
+  display: block;
+  margin: 0 0 20px 0;
+}
+#menu .selections li a {
+  color: #ffffff;
+  background: #03a9f4;
+  display: block;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 8px 6px 8px 4px;
+}
+#menu #connectedUsers {
+  font-size: 90%;
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+}
+#pictionary.disabled .ifEnabled {
+  display: none;
+}
+#pictionary .needSandbox {
+  display: none;
+}
+#pictionary.sandbox .needSandbox {
+  display: block;
+}
+#pictionary.sandbox .needNotSandbox {
+  display: none;
+}
+#pictionary #canvasWrapper {
+  background: white;
+  display: block;
+  margin: auto;
+  box-shadow: 0px 0px 10px 0px black;
+  position: relative;
+  z-index: 0;
+}
+#pictionary canvas {
+  display: block;
+  cursor: url(img/pencil.png), crosshair;
+  position: relative;
+  z-index: 2;
+}
+#pictionary #overlayToolbar {
+  position: absolute;
+  width: 100%;
+}
+#pictionary #overlayToolbar ul {
+  padding-top: 0px;
+  padding-bottom: 10px;
+}
+#pictionary #overlayToolbar a,
+#pictionary #overlayToolbar label {
+  padding-top: 15px;
+  padding-bottom: 5px;
+  position: relative;
+  z-index: 3;
+}
+#pictionary #overlayToolbar label {
+  display: inline-block;
+  padding-left: 5px;
+  margin-left: -5px;
+  padding-right: 5px;
+  margin-right: -5px;
+}
+#pictionary .colorOption {
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: block;
+  box-shadow: 0px 0px 5px 0px black;
+}
+#pictionary .colorOptionWrapper input {
+  display: none;
+}
+#pictionary .colorOptionWrapper input:checked + label .colorOption {
+  box-shadow: 0px 0px 5px 2px black;
+}
+#pictionary .color0 {
+  background: #000000;
+}
+#pictionary .color1 {
+  background: #CC0000;
+}
+#pictionary .color2 {
+  background: #009900;
+}
+#pictionary .color3 {
+  background: #0000CC;
+}

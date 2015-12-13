@@ -1,0 +1,44 @@
+<form id="game-builder">
+	<h3><a href="/" class="back"><span class="icon">arrow_back</span></a>Maak een nieuw spel aan</h3>
+	<ul class="settings">
+		<li>
+			<label for="room">Spelnaam</label>
+			<input type="text" required id="room" name="room"
+				 placeholder="spelnaam" />
+		</li>
+		<li>
+			<label for="difficulty">Niveau</label>
+			<select name="difficulty" id="difficulty" required>
+				<option value="easy">Makkelijk</option>
+				<option value="medium">Gemiddeld</option>
+				<option value="hard">Moeilijk</option>
+				<option value="random">Gevariëerd</option>
+				<option selected value="increasing">Opbouwend</option>
+			</select>
+		</li>
+		<li>
+			<label for="countWords">Aantal woorden</label>
+			<input type="number" required min="5" value="20" id="countWords" name="countWords"></input>
+		</li>
+		<li>
+			<label for="team0">Team 1</label>
+			<input type="text" name="team0" id="team0" required value="" placeholder="teamnaam" />
+		</li>
+		<li>
+			<label for="team1">Team 2</label>
+			<input type="text" name="team1" id="team1" required  value="" placeholder="teamnaam" />
+		</li>
+		<li>
+			<label for="team2">Team 3</label>
+			<input type="text" name="team2" id="team2" required value="" placeholder="teamnaam" />
+		</li>
+		<li id="newTeamLI">
+			<label></label>
+			<a class="newTeam" href="javascript:active.addTeam()"><span class="icon">add</span>Nieuw team</a>
+		</li>
+		<li>
+			<label></label>
+			<button type="submit"><span class="icon"><i class="material-icons">play_arrow</i></span>Speel</button>
+		</li>
+	<ul>
+</form>

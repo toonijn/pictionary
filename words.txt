@@ -1,0 +1,42 @@
+Easy	beer
+Easy	egel
+Easy	kam
+Easy	kapstok
+Easy	krant
+Easy	naald
+Easy	navel
+Easy	paperclip
+Easy	schaar
+Easy	schildpad
+Easy	sim-kaart
+Easy	tandem
+Easy	triangel
+Easy	vijl
+Easy	zakdoek
+Medium	acupunctuur
+Medium	alcoholstift
+Medium	ambulance
+Medium	begrafenis
+Medium	Bert en Ernie
+Medium	bibliotheek
+Medium	ironie
+Medium	kersenpitkussen
+Medium	onderlaken
+Medium	post-it
+Medium	powerpoint
+Medium	woord
+Medium	zeep
+Hard	google maps
+Hard	hik
+Hard	lens
+Hard	limerick
+Hard	museum
+Hard	nagelknipper
+Hard	parfum
+Hard	programmeren
+Hard	pruik
+Hard	quiz
+Hard	speculoos
+Hard	staking
+Hard	time's up
+Hard	vrijgezel

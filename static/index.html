@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>Pictionary</title>
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+	<link href="style.css" rel="stylesheet">
+</head>
+<body>
+	<div id="popupWrapper">
+		<div class="popup" id="popupContent">
+		</div>
+	</div>
+	<div id="screenContent"></div>
+	<script src="socket.io/socket.io.js"></script>
+	<script src="js/screenfull.js"></script>
+	<script src="all.js"></script>
+	<script>
+		var socket = io();
+		var active = null;
+		var screenContent = document.getElementById("screenContent");
+		
+		var loadScreen = function(name, _callback) {
+			var callback = null;
+			if(typeof _callback === "function")
+				callback = _callback;
+			var args = Array.prototype.slice.call(arguments, callback == null?1:2, arguments.length);
+			var xmlHttp = new XMLHttpRequest();
+
+			xmlHttp.onreadystatechange = function() {
+				if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+					screenContent.innerHTML = xmlHttp.responseText;
+					if(active != null)
+						active.destroy();
+					active = new(Function.prototype.bind.apply(
+						window[name], [null].concat(args)));
+					if(callback != null)
+						callback(active);
+				}
+			};
+
+			xmlHttp.open("GET", "/templates/" + name.toLowerCase() + ".html", true); // true for asynchronous
+			xmlHttp.send(null);
+		};
+		
+		if(location.hash == "#menu") {
+			loadScreen("Menu", socket);
+		} else if(location.hash == "#builder") {
+			loadScreen("GameBuilder", socket);
+		} else {
+			var i = parseInt(location.hash.substr(1,2)) || 0;
+			socket.once("rooms",function(rooms) {
+				loadScreen("Pictionary", function(p) {
+					document.getElementsByTagName("input")[i].checked = true;
+					Popup.current.close(true);
+				}, socket, rooms[1]);
+			});
+			socket.emit("roomsRequest");
+		}
+		
+		var openSandbox = function() {
+			loadScreen("Pictionary", socket);
+		}
+		
+		var buildGame = function() {
+			loadScreen("GameBuilder", socket);
+		}
+	</script>
+</body>
+</html>

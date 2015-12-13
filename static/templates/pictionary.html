@@ -1,0 +1,37 @@
+<div id="pictionary">
+	<div class="toolbar" id="pictionary_toolbar">
+		<ul class="tools">
+			<li class="ifEnabled"><a href="javascript:active.clear()"><span class="icon">clear</span>Clear</a></li>
+			<ul class="right">
+				<li><a href="javascript:active.save()"><span class="icon">save</span>Opslaan</a></li>
+				<li class="needSandbox"><a href="javascript:active.load()"><span class="icon">add</span>Inladen</a></li>
+				<li class="needFullscreen ifNotFullscreen"><a href="javascript:active.fullscreen()"><span class="icon">fullscreen</span> Fullscreen</a></li>
+				<li class="needFullscreen ifFullscreen"><a href="javascript:active.fullscreenExit()"><span class="icon">fullscreen_exit</span> Exit fullscreen</a></li>
+			</ul>
+		</ul>
+	</div>
+	<div class="ifEnabled" id="overlayToolbar">
+		<ul class="tools">
+			<li><a href="javascript:active.undo()"><span class="icon">undo</span>Undo</a></li>
+			<ul class="right">
+				<li class="colorOptionWrapper"><input type="radio" value="3" name="colorPicker" id="radioColor3" />
+					<label for="radioColor3"><span class="colorOption color3"></span></label></li>
+				<li class="colorOptionWrapper"><input type="radio" value="2" name="colorPicker" id="radioColor2" />
+					<label for="radioColor2"><span class="colorOption color2"></span></label></li>
+				<li class="colorOptionWrapper"><input type="radio" value="1" name="colorPicker" id="radioColor1" />
+					<label for="radioColor1"><span class="colorOption color1"></span></label>
+				<li class="colorOptionWrapper"><input checked type="radio" value="0" name="colorPicker" id="radioColor0" />
+					<label for="radioColor0"><span class="colorOption color0"></span></label></li>
+			</ul>
+		</ul>
+	</div>
+	<div id="canvasWrapper">
+		<div class="needNotSandbox">
+			<div id="myTeam"></div>
+			<div id="gameDrawer"></div>
+			<div id="timer"></div>
+			<div id="drawWord"></div>
+		</div>
+		<canvas id="canvas" width="200" height="200"></canvas>
+	</div>
+</div>
