@@ -346,6 +346,6 @@ io.on('connection', function (socket) {
 
 app.use(express.static('static'));
 
-http.listen(80, function () {
+http.listen(8080, function () {
     console.log('listening on *:80');
 });
