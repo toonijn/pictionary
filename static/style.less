@@ -146,6 +146,30 @@ input[type=text],input[type=number] {
 	}
 }
 
+svg.clock {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 150px;
+	height: 150px;
+	
+	.background {
+		stroke: none;
+		fill: white;
+	}
+	
+	.foreground {
+		stroke: @primary-dark;
+		stroke-width: 5px;
+		fill: none;
+	}
+	
+	.chrono {
+		stroke: none;
+		fill: @primary;
+	}
+}
+
 #screenContent {
 	width: 100%;
 	height: 100%;

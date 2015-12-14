@@ -43,8 +43,8 @@
 			xmlHttp.send(null);
 		};
 		
-		if(location.hash == "#builder") {
-			loadScreen("GameBuilder", socket);
+		if(location.hash == "#sandbox") {
+			loadScreen("Pictionary", socket);
 		} else if (location.hash != "") {
 			var i = parseInt(location.hash.substr(1,2)) || 0;
 			socket.once("rooms",function(rooms) {

@@ -121,6 +121,26 @@ input[type=number] {
   margin-left: 15px;
   margin-right: 0px;
 }
+svg.clock {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 150px;
+  height: 150px;
+}
+svg.clock .background {
+  stroke: none;
+  fill: white;
+}
+svg.clock .foreground {
+  stroke: #0288d1;
+  stroke-width: 5px;
+  fill: none;
+}
+svg.clock .chrono {
+  stroke: none;
+  fill: #03a9f4;
+}
 #screenContent {
   width: 100%;
   height: 100%;

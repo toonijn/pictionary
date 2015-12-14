@@ -315,6 +315,8 @@ io.on('connection', function (socket) {
 
     socket.on("joinTeam", function (team) {
 		socket.team = team;
+		if(team == rooms[room].game.drawer && rooms[room].game.state == "active")
+			socket.emit("gameWord", rooms[room].game.word);
     });
 
     socket.on("startGame", function () {

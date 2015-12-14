@@ -26,6 +26,69 @@ var addEventListenerTo = function(element, object) {
 	}
 };
 
+var Clock = (function() {
+	var Clock = function(svgWrapper) {
+		var box = svgWrapper.getBoundingClientRect();
+		this.width = box.width;
+		this.height = box.height;
+		this.chrono = document.createElementNS('http://www.w3.org/2000/svg',"path");
+		this.chrono.classList.add("chrono");
+		this.cx = this.width/2;
+		this.cy = this.height/2;
+		this.rx = this.width*.4;
+		this.ry = this.height*.4;
+		this.time = 0;
+		this.maxTime = 30000;
+		this.interval = -1;
+		
+		svgWrapper.insertBefore(this.chrono, svgWrapper.children[1]);
+	};
+	
+	Clock.prototype.startInterval = function(noNew) {
+		if(!noNew || this.interval > -1) {
+			var self = this;
+			clearInterval(this.interval);
+			this.updateChrono();
+			var last = new Date().getTime();
+			this.interval = setInterval(function() {
+				var current = new Date().getTime();
+				self.time += current-last;
+				last = current;
+				self.updateChrono();
+			}, 50);
+		}
+	};
+	
+	Clock.prototype.setTime = function(time) {
+		this.time = time;
+		this.startInterval(true);
+	};
+	
+	Clock.prototype.updateChrono = function() {
+		var angle = Math.PI*2*((1+(this.time/this.maxTime)%1)%1);
+		var cx = this.cx,
+			cy = this.cy,
+			rx = this.rx,
+			ry = this.ry;
+		this.chrono.setAttribute("d",
+			"M "+cx+" "+(cy-ry)+" "+
+			"A "+rx+" "+ry+" 0 "+(angle < Math.PI?1:0)+" 0 "+ (cx+Math.sin(angle)*rx) +" "+ (cy-Math.cos(angle)*ry) +" "+
+			"L "+cx+" "+cy+" z"
+		);
+	};
+	
+	Clock.prototype.start = function() {
+		this.startInterval();
+	};
+	
+	Clock.prototype.stop = function() {
+		if(this.interval > -1)
+			clearInterval(this.interval);
+	};
+	
+	return Clock;
+})();
+
 var Popup = (function(){
 	var popupWrapper = function() {
 		return document.getElementById("popupWrapper");
@@ -248,6 +311,8 @@ var Pictionary = (function(){
 		this.context = canvas.getContext("2d");
 		this.overlayToolbar = document.getElementById("overlayToolbar");
 		this.colors = ["#000000", "#CC0000","#009900","#0000CC"];
+		this.clock = new Clock(document.getElementById("svg"));
+		this.clock.maxTime = this.room.time*1000;
 		
 		this.init();
 		
@@ -278,13 +343,22 @@ var Pictionary = (function(){
 	
 	Pictionary.prototype.setInfo = function(info) {
 		var self = this;
-		this.info = info;
-		document.getElementById("gameDrawer").innerHTML = "<i>"+info.drawer+"</i> mag nu tekenen"
-
-		if(!this.mayDraw())
-			document.getElementById("drawWord").innerHTML = "";
-		else {
+		if(this.mayDraw())
 			Popup.close();
+		this.info = info;
+		if(this.mayDraw())
+			Popup.close();
+		
+		document.getElementById("gameDrawer").innerHTML = "<i>"+info.drawer+"</i> mag nu tekenen"
+		
+		if(info.state == "active")
+			this.clock.start();
+		else
+			this.clock.stop();
+		
+		if(!this.mayDraw()) {
+			document.getElementById("drawWord").innerHTML = "";
+		} else {
 			switch (info.state) {
 				case "waiting":
 					new Popup({
@@ -331,17 +405,16 @@ var Pictionary = (function(){
 		
 		if(!this.isSandbox()) {
 			
-			this.socket.on("gameInfo", this.functions.draw = function(info) {
+			this.socket.on("gameInfo", this.functions.gameInfo = function(info) {
 				self.setInfo(info);
 			});
 			
-			this.socket.on("gameWord", this.functions.draw = function(word) {
-				console.log(word);
+			this.socket.on("gameWord", this.functions.gameWord = function(word) {
 				document.getElementById("drawWord").innerHTML = word;
 			});
 			
-			this.socket.on("gameTimer", this.functions.draw = function(word) {
-				document.getElementById("timer").innerHTML = word;
+			this.socket.on("gameTimer", this.functions.gameTimer = function(time) {
+				self.clock.setTime(self.clock.maxTime - time);
 			});
 		}
 		
@@ -448,6 +521,8 @@ var Pictionary = (function(){
 		this.socket.off("drawing", this.functions.drawing);
 		this.socket.off("draw", this.functions.draw);
 		this.socket.off("gameInfo", this.functions.gameInfo);
+		this.socket.off("gameWord", this.functions.gameWord);
+		this.socket.off("gameTimer", this.functions.gameTimer);
 		window.removeEventListener("resize", this.functions.resize);
 	};
 		
