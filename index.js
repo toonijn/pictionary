@@ -333,14 +333,16 @@ io.on('connection', function (socket) {
 	});
 
     socket.on("newGame", function (settings) {
-        new Game(rooms[settings.room] = {
+        var game = new Game(rooms[settings.room] = {
+			drawing: [],
 			room: settings.room,
             difficulty: settings.difficulty,
             teams: settings.teams,
             countWords: settings.countWords,
 			time: 30
-        }).start();
+        });
         joinRoom(settings.room);
+		game.start();
     });
 });
 
@@ -350,5 +352,5 @@ var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 var port = process.env.OPENSHIFT_NODEJS_PORT || 80;
 
 http.listen(port, ipaddress, function () {
-    console.log('listening on *:8000');
+    console.log('listening on *:' + port);
 });

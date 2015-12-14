@@ -670,9 +670,6 @@ var GameBuilder = (function() {
 	GameBuilder.prototype.build = function() {
 		var form = this.form;
 		
-		if(!form.reportValidity())
-			return;
-		
 		var teams = [];
 		var i = 0;
 		while(form["team"+i] != null)
@@ -694,7 +691,7 @@ var GameBuilder = (function() {
 	GameBuilder.prototype.addTeam = function() {
 		var li = document.getElementById("newTeamLI");
 		var index = parseInt(li.previousElementSibling
-						.firstElementChild.innerText.substr(5));
+						.firstElementChild.innerHTML.substr(5));
 		
 		var newLi = document.createElement("li");
 		newLi.classList.add("newTeam");
