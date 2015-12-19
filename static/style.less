@@ -20,6 +20,10 @@
        url(/icons/MaterialIcons-Regular.ttf) format('truetype');
 }
 
+.shadow(@px) {
+	box-shadow: 0px 0px 10px @px black;
+}
+
 * {
 	box-sizing: border-box;
 }
@@ -45,9 +49,9 @@ p {
 h3 {
 	font-size: 120%;
 	font-weight: bold;
-	background: #03A9F4;
+	background: @primary;
 	color: white;
-	box-shadow: 0px 0px 10px 0px black;
+	.shadow(0);
 	position: relative;
 	padding: 10px;
 	margin: -10px -10px 10px;
@@ -59,16 +63,20 @@ h3 {
 
 button {
 	border: 0;
-	background: #03A9F4;
+	background: @primary;
 	display: inline-block;
 	font-weight: bold;
 	padding: 8px 6px 4px 4px;
 	color: white;
 	font-size: inherit;
+	
+	&:hover, &:active {
+		background: @primary-dark;
+	}
 }
 
 input[type=text],input[type=number] {
-	border-bottom: 1px solid #03A9F4;
+	border-bottom: 1px solid @primary;
 	padding: 4px;
 }
 
@@ -103,7 +111,7 @@ input[type=text],input[type=number] {
 
 .toolbar {
 	background: @primary;
-	box-shadow: 0px 0px 10px 2px black;
+	.shadow(2px);
 	position: relative;
 	z-index: 1;
 	color: @text-primary;
@@ -147,24 +155,13 @@ input[type=text],input[type=number] {
 }
 
 svg.clock {
-	position: absolute;
-	left: 0;
-	bottom: 0;
-	width: 150px;
-	height: 150px;
+	width: 100px;
+	height: 100px;
+	border: 5px solid @primary-dark;
 	z-index: 1;
 	pointer-events:none;
-	
-	.background {
-		stroke: none;
-		fill: white;
-	}
-	
-	.foreground {
-		stroke: @primary-dark;
-		stroke-width: 5px;
-		fill: none;
-	}
+	overflow: hidden;
+	background: white;
 	
 	.chrono {
 		stroke: none;
@@ -204,7 +201,7 @@ svg.clock {
 			top: -50%;
 			left: -50%;
 			position: relative;
-			box-shadow: 0px 0px 10px 2px black;
+			.shadow(2px);
 			background: white;
 			padding: 10px;
 			overflow:hidden;
@@ -273,7 +270,7 @@ html{
 }
 
 #game-builder {
-	box-shadow: 0px 0px 10px 2px black;
+	.shadow(2px);
 	background: white;
 	width: 400px;
 	margin: 5vh auto 0;
@@ -339,7 +336,7 @@ html{
 	position: fixed;
 	
 	.contentWrapper {
-		box-shadow: 0px 0px 10px 2px black;
+		.shadow(2px);
 		background: white;
 		top: -50%;
 		left: -50%;
@@ -380,6 +377,10 @@ html{
 		.ifEnabled {
 			display: none;
 		}
+		
+		#clock {
+			bottom: 10px;
+		}
 	}
 	
 	.needSandbox {
@@ -400,7 +401,7 @@ html{
 		background: white;
 		display: block;
 		margin: auto;
-		box-shadow: 0px 0px 10px 0px black;
+		.shadow(0);
 		position: relative;
 		z-index: 0;
 		
@@ -408,7 +409,73 @@ html{
 			
 		}
 	}
+	
+	#drawWord {
+		position: absolute;
+		width: 100%;
+		bottom: 0px;
+		z-index: 1;
+		pointer-events:none;
+		padding: 10px;
+		text-align: center;
+		font-size: 140%;
+		font-weight: bold;
+	}
+	
+	#clock {
+		position: absolute;
+		left: 10px;
+		bottom: 55px;
+		z-index: 1;
+		.shadow(0);
+	}
+	
+	.endButton {
+		position: absolute;
+		left: 10px;
+		bottom: 10px;
+		z-index: 1;
+		.shadow(0);
+	}
+	
+	#info {
+		position: absolute;
+		right: 10px;
+		bottom: 10px;
+		z-index: 1;
+		pointer-events:none;
+		background: white;
+		border: 5px solid @primary-dark;
+		padding: 6px 10px 6px 6px;
+		text-align: right;
+		.shadow(0);
 		
+		li {
+			display: block;
+			overflow: hidden;
+			padding: 2px 0;
+			
+			.team {
+				padding: 0 10px 0 0;
+				float:left;
+				
+				.icon {
+					font-size: 18px;
+					margin: 0 8px 0 0;
+				}
+			}
+			
+			&.drawer {
+				font-weight: bold;
+			}
+			
+			&.me {
+				font-weight: bold;
+				color: @primary;
+			}
+		}
+	}
+	
 	canvas {
 		display: block;
 		cursor:url(img/pencil.png),crosshair;

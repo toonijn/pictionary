@@ -33,9 +33,9 @@ p {
 h3 {
   font-size: 120%;
   font-weight: bold;
-  background: #03A9F4;
+  background: #03a9f4;
   color: white;
-  box-shadow: 0px 0px 10px 0px black;
+  box-shadow: 0px 0px 10px 0 black;
   position: relative;
   padding: 10px;
   margin: -10px -10px 10px;
@@ -45,16 +45,20 @@ h3 a.back {
 }
 button {
   border: 0;
-  background: #03A9F4;
+  background: #03a9f4;
   display: inline-block;
   font-weight: bold;
   padding: 8px 6px 4px 4px;
   color: white;
   font-size: inherit;
 }
+button:hover,
+button:active {
+  background: #0288d1;
+}
 input[type=text],
 input[type=number] {
-  border-bottom: 1px solid #03A9F4;
+  border-bottom: 1px solid #03a9f4;
   padding: 4px;
 }
 .em {
@@ -122,22 +126,13 @@ input[type=number] {
   margin-right: 0px;
 }
 svg.clock {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 100px;
+  border: 5px solid #0288d1;
   z-index: 1;
   pointer-events: none;
-}
-svg.clock .background {
-  stroke: none;
-  fill: white;
-}
-svg.clock .foreground {
-  stroke: #0288d1;
-  stroke-width: 5px;
-  fill: none;
+  overflow: hidden;
+  background: white;
 }
 svg.clock .chrono {
   stroke: none;
@@ -332,6 +327,9 @@ html.noFullscreen .needFullscreen {
 #pictionary.disabled .ifEnabled {
   display: none;
 }
+#pictionary.disabled #clock {
+  bottom: 10px;
+}
 #pictionary .needSandbox {
   display: none;
 }
@@ -345,9 +343,66 @@ html.noFullscreen .needFullscreen {
   background: white;
   display: block;
   margin: auto;
-  box-shadow: 0px 0px 10px 0px black;
+  box-shadow: 0px 0px 10px 0 black;
   position: relative;
   z-index: 0;
+}
+#pictionary #drawWord {
+  position: absolute;
+  width: 100%;
+  bottom: 0px;
+  z-index: 1;
+  pointer-events: none;
+  padding: 10px;
+  text-align: center;
+  font-size: 140%;
+  font-weight: bold;
+}
+#pictionary #clock {
+  position: absolute;
+  left: 10px;
+  bottom: 55px;
+  z-index: 1;
+  box-shadow: 0px 0px 10px 0 black;
+}
+#pictionary .endButton {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 1;
+  box-shadow: 0px 0px 10px 0 black;
+}
+#pictionary #info {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 1;
+  pointer-events: none;
+  background: white;
+  border: 5px solid #0288d1;
+  padding: 6px 10px 6px 6px;
+  text-align: right;
+  box-shadow: 0px 0px 10px 0 black;
+}
+#pictionary #info li {
+  display: block;
+  overflow: hidden;
+  padding: 2px 0;
+}
+#pictionary #info li .team {
+  padding: 0 10px 0 0;
+  float: left;
+}
+#pictionary #info li .team .icon {
+  font-size: 18px;
+  margin: 0 8px 0 0;
+}
+#pictionary #info li.drawer {
+  font-weight: bold;
+}
+#pictionary #info li.me {
+  font-weight: bold;
+  color: #03a9f4;
 }
 #pictionary canvas {
   display: block;

@@ -9,13 +9,13 @@ var rooms = {
 		room: "sandbox",
         drawing: []
     },
-	Toon: {
-		room: "Toon",
+	Baeyens: {
+		room: "Baeyens",
         drawing: [],
-		difficulty: "easy",
-        teams: ["a","b","c","d"],
-        countWords: 30,
-		time: 30
+		difficulty: "increasing",
+        teams: ["Emilie","Kaat","Toon"],
+        countWords: 50,
+		time: 45
 	}
 };
 
@@ -48,7 +48,7 @@ var words = (function() {
 	
 	Words.prototype.get = function(i) {
 		for(var cat in this.words)
-			if(i -= this.words[cat].length < 0)
+			if((i -= this.words[cat].length) < 0)
 				return this.words[cat][i+this.words[cat].length];
 	};
 	
@@ -79,6 +79,10 @@ var Game = (function() {
 		this.room = room;
 		this.count = 0;
 		room.game = this;
+		var scores = this.scores = {};
+		this.room.teams.forEach(function(team) {
+			scores[team] = 0;
+		});
 		this.word = "";
 		this.words = {};
 		this.state = "idle"; // active / wait / finished
@@ -110,7 +114,8 @@ var Game = (function() {
 	Game.prototype.getInfo = function() {
 		return {
 			drawer: this.drawer,
-			state: this.state
+			state: this.state,
+			scores: this.scores
 		};
 	};
 	
@@ -158,21 +163,25 @@ var Game = (function() {
 		var self = this;
 		var checkTimer = function() {
 			var left = self.timeLeft();
-			if(left <= 200) {
-				self.setState("finished");
-				clearInterval(timeInterval);
-			} else
+			if(left <= 200)
+				self.endWord();
+			else
 				self.send("gameTimer", left);
 		};
 		checkTimer();
-		var timeInterval = setInterval(checkTimer, 2500);
+		this.timeInterval = setInterval(checkTimer, 2500);
+	};
+	
+	Game.prototype.endWord = function() {
+		this.setState("finished");
+		clearInterval(this.timeInterval);
 	};
 	
 	Game.prototype.finish = function(winner) {
-		if(winner != null)
-			console.log(winner + " won!");
-		else
-			console.log("No one won!");
+		if(winner != null) {
+			this.scores[winner]++;
+			this.scores[this.drawer]++;
+		}
 		this.initNext(winner);
 	};
 	
@@ -184,16 +193,16 @@ var Game = (function() {
 		var d = this.room.difficulty;
 		if(d == "easy" || d == "medium" || d == "hard")
 			return words.random(d);
-		else if(d == "random")
+		else if(d == "random") {
 			return words.random();
-		else if(d == "increasing")
+		} else if(d == "increasing")
 			return words.random(this.currentDifficulty());
 	};
 	
 	return Game;
 })();
 
-new Game(rooms.Toon).start();
+new Game(rooms.Baeyens).start();
 
 io.on('connection', function (socket) {
     var room = "sandbox";
@@ -305,6 +314,12 @@ io.on('connection', function (socket) {
         socket.emit("rooms", smallRooms);
     });
 	
+    socket.on("gameEndWord", function () {
+		var game = rooms[room].game;
+		if(game.drawer == socket.team && game.state == "active")
+			game.endWord();
+    });
+	
     socket.on("gameInfoRequest", function () {
         socket.emit("gameInfo", rooms[room].game.getInfo());
     });
@@ -350,7 +365,7 @@ io.on('connection', function (socket) {
 
 app.use(express.static('static'));
 
-var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "0.0.0.0";
 var port = process.env.OPENSHIFT_NODEJS_PORT || 80;
 
 http.listen(port, ipaddress, function () {

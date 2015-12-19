@@ -25,17 +25,14 @@
 			</ul>
 		</ul>
 	</div>
-	<svg class="clock needNotSandbox" id="svg">
-		<circle cx="50%" cy="50%" r="40%" class="background" />
-		<circle cx="50%" cy="50%" r="40%" class="foreground" />
+	<svg class="clock needNotSandbox" id="clock">
 	</svg>
+	<div class="ifEnabled needNotSandbox endButton">
+		<button onClick="active.finish()"><span class="icon">stop</span>Eindig dit woord</button>
+	</div>
+	<div id="info" class="needNotSandbox"></div>
 	<div id="canvasWrapper">
-		<div class="needNotSandbox">
-			<div id="myTeam"></div>
-			<div id="gameDrawer"></div>
-			<div id="timer"></div>
-			<div id="drawWord"></div>
-		</div>
+		<div class="needNotSandbox" id="drawWord"></div>
 		<canvas id="canvas" width="200" height="200"></canvas>
 	</div>
 </div>

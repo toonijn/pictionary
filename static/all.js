@@ -28,15 +28,15 @@ var addEventListenerTo = function(element, object) {
 
 var Clock = (function() {
 	var Clock = function(svgWrapper) {
-		var box = svgWrapper.getBoundingClientRect();
-		this.width = box.width;
-		this.height = box.height;
+		this.wrapper = svgWrapper;
+		this.width = svgWrapper.clientWidth;
+		this.height = svgWrapper.clientHeight;
 		this.chrono = document.createElementNS('http://www.w3.org/2000/svg',"path");
 		this.chrono.classList.add("chrono");
 		this.cx = this.width/2;
 		this.cy = this.height/2;
-		this.rx = this.width*.4;
-		this.ry = this.height*.4;
+		this.rx = this.width;
+		this.ry = this.height;
 		this.time = 0;
 		this.maxTime = 30000;
 		this.interval = -1;
@@ -78,10 +78,12 @@ var Clock = (function() {
 	};
 	
 	Clock.prototype.start = function() {
+		this.wrapper.style.display = "block";
 		this.startInterval();
 	};
 	
 	Clock.prototype.stop = function() {
+		this.wrapper.style.display = "none";
 		if(this.interval > -1)
 			clearInterval(this.interval);
 	};
@@ -311,7 +313,7 @@ var Pictionary = (function(){
 		this.context = canvas.getContext("2d");
 		this.overlayToolbar = document.getElementById("overlayToolbar");
 		this.colors = ["#000000", "#CC0000","#009900","#0000CC"];
-		this.clock = new Clock(document.getElementById("svg"));
+		this.clock = new Clock(document.getElementById("clock"));
 		this.clock.maxTime = this.room.time*1000;
 		
 		this.init();
@@ -330,7 +332,6 @@ var Pictionary = (function(){
 				finish: function(success) {
 					if(!success) return false;
 					socket.emit("joinTeam", self.team = this.getChecked());
-					document.getElementById("myTeam").innerHTML = self.team;
 					self.startGame();
 				}
 			}).show();
@@ -349,7 +350,30 @@ var Pictionary = (function(){
 		if(this.mayDraw())
 			Popup.close();
 		
-		document.getElementById("gameDrawer").innerHTML = "<i>"+info.drawer+"</i> mag nu tekenen"
+		(function() {
+			var icon, span, li, ul = document.createElement("ul");
+			for(var team in info.scores) {
+				span = document.createElement("span");
+				span.classList.add("team");
+				icon = document.createElement("span");
+				icon.classList.add("icon");
+				span.appendChild(icon);
+				span.appendChild(document.createTextNode(team));
+				li = document.createElement("li");
+				if(team == this.team)
+					li.classList.add("me");
+				if(team == info.drawer) {
+					li.classList.add("drawer");
+					icon.innerHTML = "create";
+				}
+				li.appendChild(span)
+				li.appendChild(document.createTextNode(info.scores[team]));
+				ul.appendChild(li);
+			}
+			var infoWrapper = document.getElementById("info");
+			infoWrapper.innerHTML = "";
+			infoWrapper.appendChild(ul);
+		}).call(this);
 		
 		if(info.state == "active")
 			this.clock.start();
@@ -443,10 +467,19 @@ var Pictionary = (function(){
 				current = event.changedTouches[0];
 				current.isPencil = true;
 			}
+			
+			var x = .5+current.pageX,
+				y = .5+current.pageY;
+			var canvas = self.canvas;
+			do {
+				x -= canvas.offsetLeft - canvas.scrollLeft;
+				y -= canvas.offsetTop - canvas.scrollTop;
+			} while(canvas = canvas.offsetParent);
+			
 			var s = self.scale();
 			return {
-				x: (.5+current.pageX - event.target.offsetLeft)/s,
-				y: (.5+current.pageY - event.target.offsetTop)/s
+				x: x/s,
+				y: y/s
 			};
 		};
 		
@@ -551,8 +584,6 @@ var Pictionary = (function(){
 	};
 	
 	Pictionary.prototype.addPoint = function(point, silent) {
-		if(!point.start)
-			this.stack = [];
 		if(!silent)
 			this.socket.emit("draw", point);
 		this.drawing.push(point);
@@ -642,13 +673,17 @@ var Pictionary = (function(){
 			}
 		}).show();
 	};
+	
+	Pictionary.prototype.finish = function() {
+		this.socket.emit("gameEndWord");
+	};
 		
 	Pictionary.prototype.clear = function() {
-		socket.emit("clear");
+		this.socket.emit("clear");
 	}
 	
 	Pictionary.prototype.undo = function() {
-		socket.emit("undo");
+		this.socket.emit("undo");
 	}
 	
 	Pictionary.prototype.fullscreen = function() {
