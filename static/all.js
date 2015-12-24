@@ -626,7 +626,7 @@ var Pictionary = (function(){
 	};
 	
 	Pictionary.prototype.load = function() {
-		if(!self.mayDraw()) return;
+		if(!this.mayDraw()) return;
 		var socket = this.socket;
 		var loadPopup = new Popup({
 			title: "Laad een afbeelding",
@@ -787,7 +787,6 @@ var GameBuilder = (function() {
 		var settings = {
 			room: form.room.value,
 			difficulty: form.difficulty.value,
-			countWords: form.countWords.value,
 			teams: teams
 		};
 		this.socket.emit("newGame", settings);

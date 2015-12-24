@@ -6,17 +6,10 @@ var fs = require('fs');
 
 var rooms = {
     sandbox: {
+		sandbox: true,
 		room: "sandbox",
         drawing: []
     },
-	Baeyens: {
-		room: "Baeyens",
-        drawing: [],
-		difficulty: "increasing",
-        teams: ["Emilie","Kaat","Toon"],
-        countWords: 50,
-		time: 45
-	}
 };
 
 var words = (function() {
@@ -77,7 +70,6 @@ var words = (function() {
 var Game = (function() {
 	var Game = function(room) {
 		this.room = room;
-		this.count = 0;
 		room.game = this;
 		var scores = this.scores = {};
 		this.room.teams.forEach(function(team) {
@@ -124,24 +116,20 @@ var Game = (function() {
 	};
 	
 	Game.prototype.currentDifficulty = function() {
-		if(this.room.difficulty == "increasing") {
-			var t = this.count / this.room.countWords;
-			if(t <= .33)
-				return "easy";
-			if(t < .67)
-				return "medium";
-			return "hard";
-		}
 		return this.room.difficulty;
 	};
 	
 	Game.prototype.initNext = function(newDrawer) {
-		if(this.count >= this.room.countWords) {
-			this.setState("done");
-			return false;
+		if(newDrawer == null) {
+			var min = Infinity;
+			for(var team in this.scores)
+				min = Math.min(min, this.scores[team]);
+			var minTeams = [];
+			for(var team in this.scores)
+				if(this.scores[team] == min)
+					minTeams.push(team);
+			newDrawer = minTeams[Math.floor(Math.random()*minTeams.length)];
 		}
-		if(newDrawer == null)
-			newDrawer = this.room.teams[Math.floor(Math.random()*this.room.teams.length)];
 		this.drawer = newDrawer;
 		this.setState("waiting");
 		return true;
@@ -154,7 +142,6 @@ var Game = (function() {
 			this.word = this.nextWord();
 		} while(this.words[this.word] && --i >= 0)
 		this.words[this.word] = true;
-		this.count++;
 		
 		this.timerEnd = new Date().getTime() + 1000*this.room.time;
 		this.sendInfo();
@@ -189,20 +176,39 @@ var Game = (function() {
 		return this.timerEnd - new Date().getTime();
 	};
 	
+	Game.prototype.meanScore = function() {
+		var mean = 0;
+		var count = 0;
+		for(var team in this.scores) {
+			mean += this.scores[team];
+			count++;
+		}
+		return mean / count;
+	};
+	
 	Game.prototype.nextWord = function() {
 		var d = this.room.difficulty;
 		if(d == "easy" || d == "medium" || d == "hard")
 			return words.random(d);
-		else if(d == "random") {
+		else if(d == "random")
 			return words.random();
-		} else if(d == "increasing")
-			return words.random(this.currentDifficulty());
+		else if(d == "fair") {
+			var x = this.scores[this.drawer] - this.meanScore();
+			var a = 1, c = 2/3;
+			var e = c*(.5-Math.atan(a*x)/Math.PI)
+			var m = 1-c;
+			var r = Math.random();
+			if(r <= e)
+				return words.randomEasy();
+			else if(r <= e+m)
+				return words.randomMedium();
+			else
+				return words.randomHard();
+		}
 	};
 	
 	return Game;
 })();
-
-new Game(rooms.Baeyens).start();
 
 io.on('connection', function (socket) {
     var room = "sandbox";
@@ -210,6 +216,10 @@ io.on('connection', function (socket) {
 	
     socket.join(room);
 
+	var sandbox = function() {
+		return room == "sandbox";
+	};
+	
     var broadcastDrawing = function () {
         io.to(room).emit("drawing", getDrawing());
     };
@@ -228,6 +238,15 @@ io.on('connection', function (socket) {
       /*  if (room != "sandbox" && (io.sockets.adapter.rooms[room] == null || io.sockets.adapter.rooms[room].length == 0))
             delete rooms[room];
     */};
+	
+	var sendableRoom = function(roomName) {
+		var room = rooms[roomName];
+		var small = {};
+		for(var key in room)
+			if(key != "drawing" && key != "game")
+				small[key] = room[key];
+		return small;
+	}
 
     var joinRoom = function (newRoom) {
         if (room == newRoom)
@@ -236,6 +255,7 @@ io.on('connection', function (socket) {
 			return;
         leaveRoom();
         socket.join(room = newRoom);
+        socket.emit("roomInfo", sendableRoom(newRoom));
         socket.emit("drawing", getDrawing());
     };
 	
@@ -298,49 +318,50 @@ io.on('connection', function (socket) {
         leaveRoom();
         io.emit("connectionCount", io.engine.clientsCount);
     });
-
+	
     socket.on("roomsRequest", function () {
 		var smallRooms = [];
 		
 		for(var roomName in rooms) {
-			var room = rooms[roomName];
-			var small = {};
-			for(var key in room)
-				if(key != "drawing" && key != "game")
-					small[key] = room[key];
-			smallRooms.push(small);
+			smallRooms.push(sendableRoom(roomName));
 		}
 		
         socket.emit("rooms", smallRooms);
     });
 	
     socket.on("gameEndWord", function () {
+		if(sandbox()) return;
 		var game = rooms[room].game;
 		if(game.drawer == socket.team && game.state == "active")
 			game.endWord();
     });
 	
     socket.on("gameInfoRequest", function () {
+		if(sandbox()) return;
         socket.emit("gameInfo", rooms[room].game.getInfo());
     });
 
     socket.on("teamsRequest", function () {
+		if(sandbox()) return;
         socket.emit("teams", rooms[room].teams);
     });
 
     socket.on("joinTeam", function (team) {
+		if(sandbox()) return;
 		socket.team = team;
 		if(team == rooms[room].game.drawer && rooms[room].game.state == "active")
 			socket.emit("gameWord", rooms[room].game.word);
     });
 
     socket.on("startGame", function () {
+		if(sandbox()) return;
 		var game = rooms[room].game;
 		if(game.drawer == socket.team && game.state == "waiting")
 			game.next();
     });
 	
 	socket.on("finishGame", function(winner) {
+		if(sandbox()) return;
 		var game = rooms[room].game;
 		if(game.drawer == socket.team && game.state == "finished") {
 			game.finish(winner.trim() == "" ? null : winner);
@@ -355,7 +376,6 @@ io.on('connection', function (socket) {
 			room: settings.room,
             difficulty: settings.difficulty,
             teams: settings.teams,
-            countWords: settings.countWords,
 			time: 30
         });
         joinRoom(settings.room);
