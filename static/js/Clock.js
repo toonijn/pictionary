@@ -1,8 +1,8 @@
 var Clock = (function() {
 	var Clock = function(svgWrapper) {
 		this.wrapper = svgWrapper;
-		this.width = svgWrapper.clientWidth;
-		this.height = svgWrapper.clientHeight;
+		this.width = 100;
+		this.height = 100;
 		this.chrono = document.createElementNS('http://www.w3.org/2000/svg',"path");
 		this.chrono.classList.add("chrono");
 		this.cx = this.width/2;

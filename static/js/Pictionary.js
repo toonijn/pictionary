@@ -78,24 +78,28 @@ Scores.prototype.getNode = function(team) {
 		score.textContent = s;
 	};
 	li.setDrawer = function() {
-		if(self.drawer != null) {
-			self.drawer = null;
-			li.classList.remove("drawer");
-			icon.innerHTML = "";
-		}
+		if(self.drawer != null)
+			self.drawer.unsetDrawer();
 		self.drawer = li;
 		li.classList.add("drawer");
 		icon.innerHTML = "create";
 	};
+	li.unsetDrawer = function() {
+		li.classList.remove("drawer");
+		icon.innerHTML = "";
+		self.drawer = null;
+	};
 	li.setGuesser = function() {
-		if(self.guesser != null) {
-			self.guesser = null;
-			li.classList.remove("guesser");
-			icon.innerHTML = "";
-		}
+		if(self.guesser != null)
+			self.guesser.unsetGuesser();
 		self.guesser = li;
 		li.classList.add("guesser");
 		icon.innerHTML = "help";
+	};
+	li.unsetGuesser = function() {
+		li.classList.remove("guesser");
+		icon.innerHTML = "";
+		self.guesser = null;
 	};
 	this.ul.appendChild(li);
 	return this.list[team] = li;

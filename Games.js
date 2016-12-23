@@ -24,8 +24,9 @@ class Team extends SocketManager {
 	}
 }
 
-class Game {
+class Game extends SocketManager {
 	constructor(name, teamnames) {
+		super();
 		this.type = this.constructor.name;
 		this.name = name;
 		let teams = this.teams = {};
@@ -34,16 +35,21 @@ class Game {
 	}
 
 	emit(event, data) {
+		super.emit(event, data);
 		Object.values(this.teams).forEach((team) => {
 			team.emit(event, data);
 		});
 	}
 
 	join(teamname, socket) {
-		let team = this.teams[teamname];
-		if(team == null)
-			return console.log(teamname + " does not exist.");
-		team.join(socket);
+		if(!teamname)
+			super.join(socket);
+		else {
+			let team = this.teams[teamname];
+			if(team == null)
+				return console.log(teamname + " does not exist.");
+			team.join(socket);
+		}
 
 		socket.emit("gameSettings", this.gameSettings());
 		this.emitProgress(socket);
@@ -60,6 +66,7 @@ class Game {
 
 	gameSettings() {
 		return {
+			type: this.constructor.name,
 			teams: Object.keys(this.teams)
 		};
 	}

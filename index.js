@@ -42,14 +42,16 @@ class Lobby extends SocketManager {
 	}
 }
 
+
 lobby = new Lobby();
+/*
 lobby.newGame({
 	name: "TestGame",
 	difficulty: "random",
 	type: "OneVsOne",
 	teams: ["Klavertjes", "Hartjes", "Schoppen", "Koeken"],
-	maxTime: 10
-});
+	maxTime: 60
+});*/
 
 io.on('connection', function (socket) {
 	socket.on("joinLobby", () => {
@@ -61,7 +63,6 @@ io.on('connection', function (socket) {
 		if(game == null)
 			return socket.emit("exception",
 				"Spel '"+name+"' kon niet gevonden worden.");
-		console.log("Joining "+name);
 		game.join(teamname, socket);
 	});
 });
