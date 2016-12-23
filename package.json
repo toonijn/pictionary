@@ -14,5 +14,7 @@
   "bundleDependencies": [],
 
   "main": "index.js",
-  "start": "node index.js"
+  "scripts": {
+  	"start": "node index.js"
+  }
 }
