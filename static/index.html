@@ -15,16 +15,20 @@
 	<script src="socket.io/socket.io.js"></script>
 	<script src="js/screenfull.js"></script>
 	<script src="all.js"></script>
+	<script src="js/Menu.js"></script>
+	<script src="js/Drawing.js"></script>
+	<script src="js/Pictionary.js"></script>
+	<script src="js/Clock.js"></script>
 	<script>
 		var socket = io();
 		var active = null;
 		var screenContent = document.getElementById("screenContent");
 		
-		var loadScreen = function(name, _callback) {
+		var loadScreen = function(file, object, _callback) {
 			var callback = null;
 			if(typeof _callback === "function")
 				callback = _callback;
-			var args = Array.prototype.slice.call(arguments, callback == null?1:2, arguments.length);
+			var args = Array.prototype.slice.call(arguments, callback == null?2:3, arguments.length);
 			var xmlHttp = new XMLHttpRequest();
 
 			xmlHttp.onreadystatechange = function() {
@@ -32,39 +36,37 @@
 					screenContent.innerHTML = xmlHttp.responseText;
 					if(active != null)
 						active.destroy();
-					active = new(Function.prototype.bind.apply(
-						window[name], [null].concat(args)));
+					active = new (Function.prototype.bind.apply(
+						object, [null].concat(args)));
 					if(callback != null)
 						callback(active);
 				}
 			};
 
-			xmlHttp.open("GET", "/templates/" + name.toLowerCase() + ".html", true); // true for asynchronous
+			xmlHttp.open("GET", "/templates/" + file.toLowerCase() + ".html", true); // true for asynchronous
 			xmlHttp.send(null);
 		};
 		
-		if(location.hash == "#sandbox") {
-			loadScreen("Pictionary", socket);
-		} else if (location.hash != "") {
-			var i = parseInt(location.hash.substr(1,2)) || 0;
-			socket.once("rooms",function(rooms) {
-				loadScreen("Pictionary", function(p) {
-					document.getElementsByTagName("input")[i].checked = true;
-					Popup.current.close(true);
-				}, socket, rooms[1]);
-			});
-			socket.emit("roomsRequest");
-		} else {
-			loadScreen("Menu", socket);
-		}
-		
 		var openSandbox = function() {
-			loadScreen("Pictionary", socket);
+			loadScreen("Pictionary", Sandbox, socket);
 		}
 		
 		var buildGame = function() {
-			loadScreen("GameBuilder", socket);
+			loadScreen("GameBuilder", GameBuilder,  socket);
 		}
+
+		socket.on("exception", function(message) {
+			console.log("EXCEPTION!!")
+			new Popup({
+				title: "Er was een error",
+				description: message,
+				cancel: 'OK',
+				type: "alert",
+				cancelable: true
+			}).show();
+		});
+
+		loadScreen("Menu", Menu, socket);
 	</script>
 </body>
 </html>

@@ -422,6 +422,7 @@ Hard	mooi
 Hard	museum
 Hard	nagelknipper
 Hard	nee
+Hard	nieuwjaarsbrief
 Hard	nieuws
 Hard	nobel
 Hard	object

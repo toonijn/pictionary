@@ -278,6 +278,26 @@ html{
 	border: 1px solid @primary;
 	overflow: hidden;
 
+	.only-OneVsOne {
+		display: none;
+	}
+
+	&.OneVsOne {
+		.only-OneVsOne {
+			display: block;
+		}
+	}
+
+	.only-OneVsAll {
+		display: none;
+	}
+
+	&.OneVsAll {
+		.only-OneVsAll {
+			display: block;
+		}
+	}
+
 	select {
 		color: inherit;
 		border-bottom: 1px solid @primary;
@@ -465,7 +485,8 @@ html{
 				}
 			}
 			
-			&.drawer {
+			&.drawer,
+			&.guesser {
 				font-weight: bold;
 			}
 			

@@ -1,10 +1,10 @@
 <div id="pictionary">
 	<div class="toolbar" id="pictionary_toolbar">
 		<ul class="tools">
-			<li class="ifEnabled"><a href="javascript:active.clear()"><span class="icon">clear</span>Clear</a></li>
+			<li class="ifEnabled"><a href="javascript:active.drawing.clear()"><span class="icon">clear</span>Clear</a></li>
 			<ul class="right">
-				<li><a href="javascript:active.save()"><span class="icon">save</span>Opslaan</a></li>
-				<li class="needSandbox"><a href="javascript:active.load()"><span class="icon">add</span>Inladen</a></li>
+				<li><a href="javascript:active.drawing.save()"><span class="icon">save</span>Opslaan</a></li>
+				<li class="needSandbox"><a href="javascript:active.drawing.load()"><span class="icon">add</span>Inladen</a></li>
 				<li class="needFullscreen ifNotFullscreen"><a href="javascript:active.fullscreen()"><span class="icon">fullscreen</span> Fullscreen</a></li>
 				<li class="needFullscreen ifFullscreen"><a href="javascript:active.fullscreenExit()"><span class="icon">fullscreen_exit</span> Exit fullscreen</a></li>
 			</ul>
@@ -12,7 +12,7 @@
 	</div>
 	<div class="ifEnabled" id="overlayToolbar">
 		<ul class="tools">
-			<li><a href="javascript:active.undo()"><span class="icon">undo</span>Undo</a></li>
+			<li><a href="javascript:active.drawing.undo()"><span class="icon">undo</span>Undo</a></li>
 			<ul class="right">
 				<li class="colorOptionWrapper"><input type="radio" value="3" name="colorPicker" id="radioColor3" />
 					<label for="radioColor3"><span class="colorOption color3"></span></label></li>

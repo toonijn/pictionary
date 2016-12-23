@@ -4,9 +4,8 @@
   font-style: normal;
   font-weight: 400;
   src: url(/icons/MaterialIcons-Regular.eot);
-  src: local('Material Icons'), local('MaterialIcons-Regular'), url(/icons/MaterialIcons-Regular.woff2) format('woff2'), url(/icons/MaterialIcons-Regular.woff) format('woff'), url(/icons/MaterialIcons-Regular.ttf) format('truetype');
-  
   /* For IE6-8 */
+  src: local('Material Icons'), local('MaterialIcons-Regular'), url(/icons/MaterialIcons-Regular.woff2) format('woff2'), url(/icons/MaterialIcons-Regular.woff) format('woff'), url(/icons/MaterialIcons-Regular.ttf) format('truetype');
 }
 * {
   box-sizing: border-box;
@@ -17,7 +16,7 @@ html {
 }
 body {
   height: 100%;
-  background: #b6b6b6;
+  background: #B6B6B6;
   color: #212121;
 }
 html,
@@ -33,7 +32,7 @@ p {
 h3 {
   font-size: 120%;
   font-weight: bold;
-  background: #03a9f4;
+  background: #03A9F4;
   color: white;
   box-shadow: 0px 0px 10px 0 black;
   position: relative;
@@ -45,7 +44,7 @@ h3 a.back {
 }
 button {
   border: 0;
-  background: #03a9f4;
+  background: #03A9F4;
   display: inline-block;
   font-weight: bold;
   padding: 8px 6px 4px 4px;
@@ -54,15 +53,15 @@ button {
 }
 button:hover,
 button:active {
-  background: #0288d1;
+  background: #0288D1;
 }
 input[type=text],
 input[type=number] {
-  border-bottom: 1px solid #03a9f4;
+  border-bottom: 1px solid #03A9F4;
   padding: 4px;
 }
 .em {
-  color: #03a9f4;
+  color: #03A9F4;
 }
 .icon {
   font-family: 'Material Icons';
@@ -88,11 +87,11 @@ input[type=number] {
   margin: -4px 8px 0 0;
 }
 .toolbar {
-  background: #03a9f4;
+  background: #03A9F4;
   box-shadow: 0px 0px 10px 2px black;
   position: relative;
   z-index: 1;
-  color: #ffffff;
+  color: #FFFFFF;
 }
 .tools {
   display: block;
@@ -128,7 +127,7 @@ input[type=number] {
 svg.clock {
   width: 100px;
   height: 100px;
-  border: 5px solid #0288d1;
+  border: 5px solid #0288D1;
   z-index: 1;
   pointer-events: none;
   overflow: hidden;
@@ -136,7 +135,7 @@ svg.clock {
 }
 svg.clock .chrono {
   stroke: none;
-  fill: #03a9f4;
+  fill: #03A9F4;
 }
 #screenContent {
   width: 100%;
@@ -180,7 +179,7 @@ svg.clock .chrono {
 }
 #popupWrapper ul.selector {
   padding: 0 0 0 40px;
-  color: #03a9f4;
+  color: #03A9F4;
   margin-bottom: 10px;
 }
 #popupWrapper ul.selector li {
@@ -243,12 +242,24 @@ html.noFullscreen .needFullscreen {
   width: 400px;
   margin: 5vh auto 0;
   padding: 10px;
-  border: 1px solid #03a9f4;
+  border: 1px solid #03A9F4;
   overflow: hidden;
+}
+#game-builder .only-OneVsOne {
+  display: none;
+}
+#game-builder.OneVsOne .only-OneVsOne {
+  display: block;
+}
+#game-builder .only-OneVsAll {
+  display: none;
+}
+#game-builder.OneVsAll .only-OneVsAll {
+  display: block;
 }
 #game-builder select {
   color: inherit;
-  border-bottom: 1px solid #03a9f4;
+  border-bottom: 1px solid #03A9F4;
   padding: 4px;
   background: inherit;
 }
@@ -271,14 +282,14 @@ html.noFullscreen .needFullscreen {
 #game-builder ul.settings > li.newTeam a {
   display: inline-block;
   float: none;
-  color: #03a9f4;
+  color: #03A9F4;
   text-decoration: none;
   font-size: inherit;
 }
 #game-builder ul.settings > li a.newTeam {
   display: inline-block;
   float: none;
-  color: #03a9f4;
+  color: #03A9F4;
   text-decoration: none;
 }
 #game-builder ul.settings > li a.newTeam:hover {
@@ -311,8 +322,8 @@ html.noFullscreen .needFullscreen {
   margin: 0 0 20px 0;
 }
 #menu .selections li a {
-  color: #ffffff;
-  background: #03a9f4;
+  color: #FFFFFF;
+  background: #03A9F4;
   display: block;
   text-decoration: none;
   font-weight: bold;
@@ -379,7 +390,7 @@ html.noFullscreen .needFullscreen {
   z-index: 1;
   pointer-events: none;
   background: white;
-  border: 5px solid #0288d1;
+  border: 5px solid #0288D1;
   padding: 6px 10px 6px 6px;
   text-align: right;
   box-shadow: 0px 0px 10px 0 black;
@@ -397,12 +408,13 @@ html.noFullscreen .needFullscreen {
   font-size: 18px;
   margin: 0 8px 0 0;
 }
-#pictionary #info li.drawer {
+#pictionary #info li.drawer,
+#pictionary #info li.guesser {
   font-weight: bold;
 }
 #pictionary #info li.me {
   font-weight: bold;
-  color: #03a9f4;
+  color: #03A9F4;
 }
 #pictionary canvas {
   display: block;
