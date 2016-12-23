@@ -13,5 +13,6 @@
   "devDependencies": {},
   "bundleDependencies": [],
 
-  "main": "index.js"
+  "main": "index.js",
+  "start": "node index.js"
 }
