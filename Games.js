@@ -36,8 +36,9 @@ class Game extends SocketManager {
 
 	emit(event, data) {
 		super.emit(event, data);
-		Object.values(this.teams).forEach((team) => {
-			team.emit(event, data);
+
+		Object.keys(this.teams).forEach((team) => {
+			this.teams[team].emit(event, data);
 		});
 	}
 
