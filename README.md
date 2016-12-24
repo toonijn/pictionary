@@ -17,6 +17,6 @@ pip install -U socketIO-client
 ```
 Choose the appropriate videodriver http://sdl.beuc.net/sdl.wiki/SDL_envvars
 ```
-export SDL_VIDEODRIVER fbcon
+export SDL_VIDEODRIVER=fbcon
 python client.py
 ```
